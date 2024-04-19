@@ -25,3 +25,11 @@ export enum Role {
   ADMIN = "ADMIN",
   USER = "USER",
 }
+
+export interface CvInfoInput {
+  name: string;
+  age: number;
+  job: string;
+  skillIds: string[];
+  userId: string;
+}

@@ -32,3 +32,16 @@ type User {
   role: Role
   cvs: [Cv]
 }
+
+input CvInfoInput {
+  name: String
+  age: Int
+  job: String
+  skillIds: [String]
+  userId: [String]
+}
+
+type Mutation {
+  createCv(input: CvInfoInput): Cv
+  updateCv(id: Int!, input: CvInfoInput): Cv
+}
