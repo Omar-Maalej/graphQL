@@ -38,10 +38,11 @@ input CvInfoInput {
   age: Int
   job: String
   skillIds: [String]
-  userId: [String]
+  userId: String
 }
 
 type Mutation {
   createCv(input: CvInfoInput): Cv
-  updateCv(id: Int!, input: CvInfoInput): Cv
+  updateCv(id: ID!, input: CvInfoInput): Cv
+  deleteCv(id: ID!): String!
 }
