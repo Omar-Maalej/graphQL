@@ -1,6 +1,7 @@
 import { createSchema, createYoga } from "graphql-yoga";
 import { createServer } from "http";
 import  { Query }  from "./resolvers/Query";
+import { Mutation } from "./resolvers/Mutation";
 const fs = require("fs");
 const path = require("path");
 
@@ -8,7 +9,8 @@ export const schema = createSchema({
     typeDefs: fs.readFileSync(
         path.join(__dirname, "schema/schema.graphql"),"utf-8"),
         resolvers: {
-            Query
+            Query,
+            Mutation
         },
     });
 

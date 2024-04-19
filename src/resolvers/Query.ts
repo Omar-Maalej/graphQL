@@ -13,7 +13,11 @@ export const Query = {
   getCVById: (_ : any, { id } : {id : string}) => {
     const cv= cvs.find((cv) => cv.id === id);
     console.log(cv);
-    if(cv) return cv;
+    if(cv) return {
+      ...cv,
+      user: users.find(user => user.id === cv.user),
+      skills: cv.skillIds.map(skillId => skills.find(skill => skill.id === skillId)),
+    };
     else throw new GraphQLError("CV not found 404 error",
     {
         extensions: {
