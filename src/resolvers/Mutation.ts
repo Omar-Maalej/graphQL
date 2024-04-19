@@ -40,10 +40,20 @@ export const Mutation = {
       skillIds,
       userId,
     };
+    const newSkills = skills.filter((skill) => skillIds.includes(skill.id));
+    const user = users.find((user) => user.id === userId);
 
     cvs.push(newCv);
     console.log(newCvs);
-    return newCv;
+    const returnCv = {
+      id: String(cvIdCounter),
+      name,
+      age,
+      job,
+      user,
+      skills: newSkills,
+    };
+    return returnCv;
   },
 
   updateCv: (_: any, { id, input }: { id: string; input: CvInfoInput }) => {
