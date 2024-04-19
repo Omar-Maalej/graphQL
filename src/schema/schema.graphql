@@ -1,33 +1,33 @@
+  enum Role{
+    ADMIN
+    USER
+  }
   type Skill {
     id: ID!,
-    designation : string!,
+    designation : String!,
     cvs : [Cv]
-  }
-
-  enum Role{
-    ADMIN,
-    USER
   }
 
   type User {
     id: ID!,
-    name: string!,
-    email: string,
+    name: String,
+    email: String,
     role: Role,
-    cvs : [Cvs],
-    skills: [Skill]
+    cvs : [Cv],
+
   }
 
   type Cv {
     id: ID!,
-    name: string!,
+    name: String!,
     age: Int,
-    job: string,
-    user : User
-
+    job: String,
+    skills: [Skill]
+    user : User,
   }
 
-  type Query{
-    hello
-  }
+type Query {
+  getAllCVs: [Cv],
+  getCVById: Cv
+}
     
