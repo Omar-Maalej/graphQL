@@ -1,33 +1,34 @@
-  type Skill {
-    id: ID!,
-    designation : string!,
-    cvs : [Cv]
-  }
+type Query {
+  getAllCvs: [Cv]
+  getCvById(id: ID!): Cv
+  getUserById(id: ID!): User
+  getSkillById(id: ID!): Skill
+}
 
-  enum Role{
-    ADMIN,
-    USER
-  }
+type Cv {
+  id: ID!
+  name: String!
+  age: Int!
+  job: String!
+  skills: [Skill]
+  user: User
+}
 
-  type User {
-    id: ID!,
-    name: string!,
-    email: string,
-    role: Role,
-    cvs : [Cvs],
-    skills: [Skill]
-  }
+type Skill {
+  id: ID!
+  designation: String!
+  cvs: [Cv]
+}
 
-  type Cv {
-    id: ID!,
-    name: string!,
-    age: Int,
-    job: string,
-    user : User
+enum Role {
+  ADMIN
+  USER
+}
 
-  }
-
-  type Query{
-    hello
-  }
-    
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  role: Role
+  cvs: [Cv]
+}
