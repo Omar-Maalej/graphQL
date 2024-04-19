@@ -1,0 +1,33 @@
+  type Skill {
+    id: ID!,
+    designation : string!,
+    cvs : [Cv]
+  }
+
+  enum Role{
+    ADMIN,
+    USER
+  }
+
+  type User {
+    id: ID!,
+    name: string!,
+    email: string,
+    role: Role,
+    cvs : [Cvs],
+    skills: [Skill]
+  }
+
+  type Cv {
+    id: ID!,
+    name: string!,
+    age: Int,
+    job: string,
+    user : User
+
+  }
+
+  type Query{
+    hello
+  }
+    
