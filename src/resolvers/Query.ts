@@ -1,4 +1,4 @@
-import { getAllCVs, getCVById, getUserById, getSkillById } from '../mockData';
+import { getAllCVs, getCVById, getUserById, getSkillById } from '../database/queries';
 
 export const Query = {
     getAllCVs: () => getAllCVs(),
