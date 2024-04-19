@@ -1,0 +1,48 @@
+type Query {
+  getAllCVs: [CV]
+  getCVById(id: ID!): CV,
+  getUserById(id: ID!): User,
+  getSkillById(id: ID!): Skill
+}
+
+type CV {
+  id: ID!
+  name: String!
+  age: Int!
+  job: String!
+  owner: User!
+  skills: [Skill]
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  role: UserRole!
+}
+
+type Skill {
+  id: ID!
+  designation: String!
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+input CVInput {
+  name: String!
+  age: Int!
+  job: String!
+  ownerId: ID!
+  skillIds: [ID!]!
+}
+
+input CVUpdateInput {
+  name: String
+  age: Int
+  job: String
+  ownerId: ID
+  skillIds: [ID!]
+}
