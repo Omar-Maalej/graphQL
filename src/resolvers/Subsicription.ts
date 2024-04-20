@@ -4,21 +4,23 @@ const CV_DELETED = 'CV_DELETED';
 
 export const Subscription = {
     cvAdded: {
-        subscribe: (pubsub: any) => pubsub.subscribe(CV_ADDED),
+        subscribe: (parent: any, args: any, context: any) => { 
+            return context.pubSub.subscribe(CV_ADDED) },
         resolve: (payload: any) => {
-            return payload;
+            return payload.cvAdded;
         }
     },
     cvUpdated: {
-        subscribe: (pubsub: any) => pubsub.subscribe(CV_UPDATED),
+        subscribe: (parent: any, args: any, context: any) => context.pubSub.subscribe(CV_UPDATED),
         resolve: (payload: any) => {
-            return payload;
+            return payload.cvUpdated;
         }
     },
     cvDeleted: {
-        subscribe: (pubsub: any) => pubsub.subscribe(CV_DELETED),
+        subscribe: (parent: any, args: any, context: any) => context.pubSub.subscribe(CV_DELETED),
         resolve: (payload: any) => {
-            return payload;
+            return payload.cvDeleted;
         }
     }
 };
+

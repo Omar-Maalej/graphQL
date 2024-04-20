@@ -1,20 +1,24 @@
-import { PubSub, createYoga } from "graphql-yoga";
+// @ts-nocheck
+
+import {  createYoga } from "graphql-yoga";
 import { createPubSub } from '@graphql-yoga/subscription';
 import { createServer } from "http";
 import { schema } from "./schema/schema";
 
 
+
 type PubSubEvents = {
-    cvAdded: [payload : any]
-    cvUpdated: [payload : any]
-    cvDeleted: [payload : any]
-}
+    cvAdded: { cvAdded: any };
+    cvUpdated: { cvUpdated: any };
+    cvDeleted: { cvDeleted: any };
+};
+
 
 function main() {
-    const pubSub = createPubSub(); // Change the type of pubSub
+    const pubSub = createPubSub<PubSubEvents>();
     const yoga = createYoga({ 
         schema,
-        // context: {  pubSub } // Change 'pubsub' to 'pubSub'
+        context: { pubSub } 
     });
     const server = createServer(yoga);
     server.listen(4000, () => {

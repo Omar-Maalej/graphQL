@@ -1,24 +1,22 @@
 import { addCv, updateCv, deleteCv } from "../database/queries";
 
 export const Mutation = {
-    addCV: (_: any, { input }: { input: any }, { pubsub }: { pubsub: any }) => {
+    addCV: (_: any, { input }: { input: any }, context: any) => {
         const newCv = addCv(input);
-        
-        pubsub.publish('CV_ADDED', { cvAdded: newCv });
-        
+        context.pubSub.publish('CV_ADDED', { cvAdded: newCv }); // Access pubSub from context
         return newCv;
     },
-    updateCV: (_: any, { id, input }: { id: string, input: any }, { pubsub }: { pubsub: any }) => {
+    updateCV: (_: any, { id, input }: { id: string, input: any }, context: any) => {
         const updatedCv = updateCv(id, input);
         
-        pubsub.publish('CV_UPDATED', { cvUpdated: updatedCv });
+        context.pubSub.publish('CV_UPDATED', { cvUpdated: updatedCv }); // Access pubSub from context
         
         return updatedCv;
     },
-    deleteCV: (_: any, { id }: { id: string }, { pubsub }: { pubsub: any }) => {
+    deleteCV: (_: any, { id }: { id: string }, context: any) => {
         deleteCv(id);
         
-        pubsub.publish('CV_DELETED', { cvDeleted: id });
+        context.pubSub.publish('CV_DELETED', { cvDeleted: id }); // Access pubSub from context
         
         return id;
     }
