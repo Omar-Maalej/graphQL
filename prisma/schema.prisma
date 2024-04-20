@@ -1,0 +1,37 @@
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:admin@localhost:1919/graphql_tp"
+}
+ 
+generator client {
+  provider = "prisma-client-js"
+}
+ 
+model User {
+  id    Int  @id @default(autoincrement())
+  name  String
+  email String
+  role  Role
+  cvs   Cv[]
+}
+
+model Cv {
+  id     Int  @id @default(autoincrement())
+  name   String
+  age    Int
+  job    String
+  skills Skill[] @relation("CvToSkill")
+  user   User?   @relation(fields: [userId], references: [id])
+  userId Int?
+}
+
+model Skill {
+  id          Int @id @default(autoincrement())
+  designation String
+  cvs         Cv[]   @relation("CvToSkill")
+}
+
+enum Role {
+  ADMIN
+  USER
+}

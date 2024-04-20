@@ -2,6 +2,7 @@ import { createPubSub, createSchema, createYoga } from "graphql-yoga";
 import { createServer } from "http";
 import { Query } from "./resolvers/Query";
 import { Mutation } from "./resolvers/Mutation";
+import { resolvers } from "./resolvers/schema";
 
 const fs = require("fs");
 const path = require("path");
@@ -11,10 +12,11 @@ export const schema = createSchema({
     path.join(__dirname, "schema/schema.graphql"),
     "utf-8"
   ),
-  resolvers: {
-    Query,
-    Mutation,
-  },
+  // resolvers: {
+  //   Query,
+  //   Mutation,
+  // },
+  resolvers,
 });
 
 function main() {

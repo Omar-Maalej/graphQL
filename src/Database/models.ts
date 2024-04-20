@@ -33,3 +33,11 @@ export interface CvInfoInput {
   skillIds: string[];
   userId: string;
 }
+
+export interface AsyncCvInfoInput {
+  name: string;
+  age: number;
+  job: string;
+  skillIds: number[];
+  userId: number;
+}

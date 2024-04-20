@@ -1,8 +1,8 @@
 type Query {
   getAllCvs: [Cv]
-  getCvById(id: ID!): Cv
-  getUserById(id: ID!): User
-  getSkillById(id: ID!): Skill
+  getCvById(id: Int!): Cv
+  getUserById(id: Int!): User
+  getSkillById(id: Int!): Skill
 }
 
 type Cv {
@@ -41,8 +41,16 @@ input CvInfoInput {
   userId: String
 }
 
+input AsyncCvInfoInput {
+  name: String
+  age: Int
+  job: String
+  skillIds: [Int]
+  userId: Int
+}
+
 type Mutation {
-  createCv(input: CvInfoInput): Cv
-  updateCv(id: ID!, input: CvInfoInput): Cv
-  deleteCv(id: ID!): String!
+  createCv(input: AsyncCvInfoInput): Cv
+  updateCv(id: Int!, input: AsyncCvInfoInput): Cv
+  deleteCv(id: Int!): String!
 }
