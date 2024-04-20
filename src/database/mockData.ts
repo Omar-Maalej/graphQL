@@ -5,6 +5,12 @@ export const users = [
       email: "aymen@gmail.com",
       role: "ADMIN",
     },
+    {
+      id: "2",
+      name: "Ali",
+      email: "ali@gmail.com",
+      role:! "USER",
+    },
   ];
   
   export const cvs = [

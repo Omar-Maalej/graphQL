@@ -46,3 +46,16 @@ input CVUpdateInput {
   ownerId: ID
   skillIds: [ID!]
 }
+
+
+type Mutation {
+  addCV(input: CVInput!): CV
+  updateCV(id: ID!, input: CVUpdateInput!): CV
+  deleteCV(id: ID!): ID
+}
+
+type Subscription {
+  cvAdded: CV
+  cvUpdated: CV
+  cvDeleted: ID
+}
