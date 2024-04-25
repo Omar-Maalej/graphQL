@@ -1,45 +1,22 @@
-import { GraphQLError } from "graphql";
-import { cvs, skills, users } from "../database/database";
+import { addCv, updateCv, deleteCv } from "../database/queries";
 
 export const Mutation = {
-  createCv : (_ : any, {input} : any) => {
-    console.log(input);
-    const { name, age, job, skillIds, userId } = input;
-    const id = cvs.length + 1;
-    const newSkills = skills.filter((skill) => skillIds.includes(skill.id));
-    const user = users.find((user) => user.id === userId);
-    if (!user) {
-      throw new GraphQLError (`user d'id ${userId} n'existe pas`
-      ,
-      {
-        extensions: {
-            http: {
-                status: 404,
-                headers: {
-                "x-custom-header": "some-value",
-                },
-            },
-        }
-    });
+    createCV: (_: any, { input }: { input: any }, context: any) => {
+        const newCv = addCv(input);
+       
+        return newCv;
+    },
+    updateCV: (_: any, { id, input }: { id: string, input: any }, context: any) => {
+        const updatedCv = updateCv(id, input);
+        
+       
+        
+        return updatedCv;
+    },
+    deleteCV: (_: any, { id }: { id: string }, context: any) => {
+        deleteCv(id);
+        
+        
+        return id;
     }
-    const newCV = {
-      id : id+"",
-      name,
-      age,
-      job,
-      skillIds,
-      user: userId,
-    };
-    console.log(newCV);
-    cvs.push(newCV);
-    const returnCv = {
-      id : id+"",
-      name,
-      age,
-      job,
-      user,
-      skills : newSkills
-    }
-    return returnCv;
-  }
-}
+};

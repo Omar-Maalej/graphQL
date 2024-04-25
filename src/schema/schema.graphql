@@ -48,6 +48,7 @@ input CvUpdateInput {
 }
     
 type Mutation {
-  createCv(input: CvCreateInput) : Cv,
-  updateCv(input: CvUpdateInput) : Cv
+  createCV(input: CvCreateInput) : Cv,
+  updateCV(id: ID!, input: CvUpdateInput) : Cv,
+  deleteCV(id: ID!) : Cv
 }
