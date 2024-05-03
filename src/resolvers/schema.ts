@@ -12,110 +12,18 @@ export const resolvers = {
     getUserById: (_: any, { id }: { id: number }) => getUserById(id, context),
     getSkillById: (_: any, { id }: { id: number }) => getSkillById(id, context),
   },
-
   Mutation: {
     async createCv(_: any, { input }: { input: AsyncCvInfoInput }) {
-      const { name, age, job, skillIds, userId } = input;
-      const skills = await context.prisma.skill.findMany({
-        where: {
-          id: {
-            in: skillIds,
-          },
-        },
-      });
-
-      const skillIdsFromDB = skills.map((skill) => skill.id);
-
-      const missingSkillIds = skillIds.filter(
-        (skillId) => !skillIdsFromDB.includes(skillId)
-      );
-
-      if (missingSkillIds.length > 0) {
-        throw new GraphQLError(
-          `Skills with IDs ${missingSkillIds.join(",")} not found.`
-        );
-      }
-
-      const newCv = await context.prisma.cv.create({
-        data: {
-          name,
-          age,
-          job,
-          userId: userId as number,
-          skills: {
-            connect: skills.map((skill) => ({ id: skill.id })),
-          },
-        },
-
-        include: {
-          skills: true,
-          user: true,
-        },
-      });
-      return newCv;
+      return createCv(input, context);
     },
     async updateCv(
       _: any,
       { id, input }: { id: number; input: AsyncCvInfoInput }
     ) {
-      const cv = context.prisma.cv.findFirst({
-        where: { id },
-      });
-
-      const { name, age, job, skillIds, userId } = input;
-
-      if (!cv) throw new GraphQLError(`Cv with id ${id} doesn't exist`);
-
-      const skills = await context.prisma.skill.findMany({
-        where: {
-          id: {
-            in: skillIds,
-          },
-        },
-      });
-
-      const skillIdsFromDB = skills.map((skill) => skill.id);
-
-      const missingSkillIds = skillIds.filter(
-        (skillId) => !skillIdsFromDB.includes(skillId)
-      );
-
-      if (missingSkillIds.length > 0) {
-        throw new GraphQLError(
-          `Skills with IDs ${missingSkillIds.join(",")} not found.`
-        );
-      }
-
-      const updatedCv = await context.prisma.cv.update({
-        where: { id },
-        data: {
-          name,
-          age,
-          job,
-          userId: userId as number,
-          skills: {
-            connect: skills.map((skill) => ({ id: skill.id })),
-          },
-        },
-        include: {
-          skills: true,
-          user: true,
-        },
-      });
-      return updatedCv;
+      return updateCv(id, input, context);
     },
-    async deleteCv(_: any, { id }: { id: number }, context: GraphQLContext) {
-      const cv = await getCVById(id, context);
-
-      if (1 == 1) {
-        throw new GraphQLError(`Cv with id ${id} doesn't exist`);
-      }
-
-      await context.prisma.cv.delete({
-        where: { id },
-      });
-
-      return "Cv deleted successfully";
+    async deleteCv(_: any, { id }: { id: number }) {
+      return deleteCv(id, context);
     },
   },
 };
@@ -148,4 +56,110 @@ async function getSkillById(id: number, context: GraphQLContext) {
     where: { id },
   });
   return skill ? skill : null;
+}
+
+async function createCv(input: any, context: GraphQLContext): Promise<any> {
+  console.log("AAAAAAAAAAAAAAAAAAAAAAA");
+  const { name, age, job, skillIds, userId } = input;
+  const skills = await context.prisma.skill.findMany({
+    where: {
+      id: {
+        in: skillIds,
+      },
+    },
+  });
+
+  const skillIdsFromDB = skills.map((skill) => skill.id);
+
+  const missingSkillIds = skillIds.filter(
+    (skillId: any) => !skillIdsFromDB.includes(skillId)
+  );
+
+  if (missingSkillIds.length > 0) {
+    throw new GraphQLError(
+      `Skills with IDs ${missingSkillIds.join(",")} not found.`
+    );
+  }
+
+  const newCv = await context.prisma.cv.create({
+    data: {
+      name,
+      age,
+      job,
+      userId: userId as number,
+      skills: {
+        connect: skills.map((skill) => ({ id: skill.id })),
+      },
+    },
+
+    include: {
+      skills: true,
+      user: true,
+    },
+  });
+  return newCv;
+}
+
+async function updateCv(id: number, input: any, context: GraphQLContext) {
+  const cv = context.prisma.cv.findFirst({
+    where: { id },
+  });
+
+  if (!cv) throw new GraphQLError(`Cv with id ${id} doesn't exist`);
+
+  const { name, age, job, skillIds } = input;
+
+  const updateData: any = {};
+
+  if (name) updateData.name = name;
+  if (age) updateData.age = age;
+  if (job) updateData.job = job;
+
+  if (skillIds) {
+    const skills = await context.prisma.skill.findMany({
+      where: {
+        id: {
+          in: skillIds,
+        },
+      },
+    });
+
+    const skillIdsFromDB = skills.map((skill) => skill.id);
+
+    const missingSkillIds = skillIds.filter(
+      (skillId: any) => !skillIdsFromDB.includes(skillId)
+    );
+
+    if (missingSkillIds.length > 0) {
+      throw new GraphQLError(
+        `Skills with IDs ${missingSkillIds.join(",")} not found.`
+      );
+    }
+    updateData.skills = {
+      set: skills.map((skill) => ({ id: skill.id })),
+    };
+  }
+
+  const updatedCv = await context.prisma.cv.update({
+    where: { id },
+    data: updateData,
+    include: {
+      skills: true,
+      user: true,
+    },
+  });
+  return updatedCv;
+}
+
+async function deleteCv(id: number, context: GraphQLContext) {
+  const cv: any = await getCVById(id, context);
+  if (!cv) {
+    throw new GraphQLError(`Cv with id ${id} doesn't exist`);
+  }
+
+  await context.prisma.cv.delete({
+    where: { id },
+  });
+
+  return "Cv deleted successfully";
 }
