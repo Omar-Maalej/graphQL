@@ -54,3 +54,9 @@ type Mutation {
   updateCv(id: Int!, input: AsyncCvInfoInput): Cv
   deleteCv(id: Int!): String!
 }
+
+type Subscription {
+  cvAdded: Cv
+  cvUpdated: Cv
+  cvDeleted: String
+}

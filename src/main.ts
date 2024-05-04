@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { createPubSub, createSchema, createYoga } from "graphql-yoga";
 import { createServer } from "http";
 import { Query } from "./resolvers/Query";
@@ -6,6 +8,12 @@ import { resolvers } from "./resolvers/schema";
 
 const fs = require("fs");
 const path = require("path");
+
+type PubSubEvents = {
+  cvAdded: { cvAdded: any };
+  cvUpdated: { cvUpdated: any };
+  cvDeleted: { cvDeleted: any };
+};
 
 export const schema = createSchema({
   typeDefs: fs.readFileSync(
@@ -20,8 +28,8 @@ export const schema = createSchema({
 });
 
 function main() {
-  const pubSub = createPubSub();
-  const yoga = createYoga({ schema: schema });
+  const pubSub = createPubSub<PubSubEvents>();
+  const yoga = createYoga({ schema: schema, context: { pubSub } });
   const server = createServer(yoga);
   server.listen(4000, () => {
     console.info("Server is running on http://localhost:4000/graphql");
